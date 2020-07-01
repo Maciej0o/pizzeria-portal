@@ -8,6 +8,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+import {NavLink} from 'react-router-dom';
 
 class Waiter extends React.Component {
   static propTypes = {
@@ -17,6 +18,7 @@ class Waiter extends React.Component {
       error: PropTypes.oneOfType([PropTypes.bool,PropTypes.string]),
     }),
     tables: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    changeStatus: PropTypes.func,
   }
 
   componentDidMount(){
@@ -24,12 +26,13 @@ class Waiter extends React.Component {
     fetchTables();
   }
 
-  renderActions(status){
+  renderActions(id, status){
+    const {changeStatus} = this.props;
     switch (status) {
       case 'free':
         return (
           <>
-            <Button>thinking</Button>
+            <Button onClick={() => changeStatus({id, status: 'thinking'})}>thinking</Button>
             <Button>new order</Button>
           </>
         );
@@ -39,19 +42,19 @@ class Waiter extends React.Component {
         );
       case 'ordered':
         return (
-          <Button>prepared</Button>
+          <Button onClick={() => changeStatus({id, status: 'prepared'})}>prepared</Button>
         );
       case 'prepared':
         return (
-          <Button>delivered</Button>
+          <Button onClick={() => changeStatus({id, status: 'delivered'})}>delivered</Button>
         );
       case 'delivered':
         return (
-          <Button>paid</Button>
+          <Button onClick={() => changeStatus({id, status: 'paid'})}>paid</Button>
         );
       case 'paid':
         return (
-          <Button>free</Button>
+          <Button onClick={() => changeStatus({id, status: 'free'})}>free</Button>
         );
       default:
         return null;
@@ -98,13 +101,13 @@ class Waiter extends React.Component {
                   </TableCell>
                   <TableCell>
                     {row.order && (
-                      <Button to={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}>
+                      <Button variant="contained" component={NavLink} to={`${process.env.PUBLIC_URL}/waiter/order/${row.order}`}>
                         {row.order}
                       </Button>
                     )}
                   </TableCell>
                   <TableCell>
-                    {this.renderActions(row.status)}
+                    {this.renderActions(row.id, row.status)}
                   </TableCell>
                 </TableRow>
               ))}
@@ -115,6 +118,8 @@ class Waiter extends React.Component {
     }
   }
 }
-
+Waiter.propTypes ={
+  tables: PropTypes.object,
+};
 
 export default Waiter;
