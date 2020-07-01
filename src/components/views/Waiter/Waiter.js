@@ -16,7 +16,7 @@ class Waiter extends React.Component {
       active: PropTypes.bool,
       error: PropTypes.oneOfType([PropTypes.bool,PropTypes.string]),
     }),
-    tables: PropTypes.oneOfType([PropTypes.object,PropTypes.array]),
+    tables: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
   }
 
   componentDidMount(){
@@ -57,6 +57,7 @@ class Waiter extends React.Component {
         return null;
     }
   }
+  
 
   render() {
     const { loading: { active, error }, tables } = this.props;
@@ -114,5 +115,6 @@ class Waiter extends React.Component {
     }
   }
 }
+
 
 export default Waiter;
